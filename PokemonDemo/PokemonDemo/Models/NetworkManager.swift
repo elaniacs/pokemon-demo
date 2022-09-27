@@ -37,11 +37,11 @@ class NetworkManager: ObservableObject {
 //        }
 //    }
     
-    func fetchData(offset: Int) {
+    func fetchData(offset: Int, limit: Int) {
         
         var id = offset
         
-        if let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=50&offset=\(offset)") {
+        if let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=\(limit)&offset=\(offset)") {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error == nil {

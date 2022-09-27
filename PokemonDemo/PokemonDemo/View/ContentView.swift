@@ -11,6 +11,9 @@ struct ContentView: View {
     
     @ObservedObject var networkManager = NetworkManager()
     @State var offsetValue: Int = 0
+    @State var offsetSize = 50
+    @State var pagValue = 1
+    @State var pagQtde = 0
     
     var body: some View {
         
@@ -24,6 +27,10 @@ struct ContentView: View {
                             .bold()
                             .padding(.horizontal)
                             .aspectRatio(contentMode: .fit)
+                            .onAppear{
+                                pagQtde =  Int((Double(networkManager.count) /
+                                                Double(offsetSize)).rounded(.up))
+                            }
                         
                         Text(pokemon.pokemonData.name)
                             .italic()
@@ -32,34 +39,39 @@ struct ContentView: View {
                     }
                 }
             }.onAppear {
-                networkManager.fetchData(offset: offsetValue)
+                networkManager.fetchData(offset: offsetValue, limit: offsetSize)
             }
             .navigationTitle("Pokemons")
             
             HStack {
-                if offsetValue > 9 {
+                if pagValue > 1 {
                     Button("<") {
-                        offsetValue -= 50
-                        networkManager.fetchData(offset: offsetValue)
+                        pagValue -= 1
+                        offsetValue -= offsetSize
+                        networkManager.fetchData(offset: offsetValue, limit: offsetSize)
                     }.padding()
                 }
                 
-                Button("1") {
-                    offsetValue = 0
-                    networkManager.fetchData(offset: offsetValue)
-                }.padding()
+                Text("\(pagValue) / \(pagQtde)")
+                    .padding()
                 
-                if offsetValue <= networkManager.count - 50 {
+                if pagValue < pagQtde {
                     Button(">") {
-                        offsetValue += 50
-                        networkManager.fetchData(offset: offsetValue)
+                        pagValue += 1
+                        offsetValue += offsetSize
+                        if pagValue == pagQtde {
+                            networkManager.fetchData(offset: offsetValue, limit: networkManager.count - offsetValue)
+                        }
+                        else {
+                            networkManager.fetchData(offset: offsetValue, limit: offsetSize)
+                        }
                     }.padding()
                 }
             }
         }
     }
 }
-
+    
 
 //
 //struct ContentView_Previews: PreviewProvider {
