@@ -17,61 +17,69 @@ struct ContentView: View {
     
     var body: some View {
         
-        
-        VStack {
-            List {
-                ForEach(networkManager.pokeIndex) { pokemon in
-                    
-                    HStack {
-                        Text("\(pokemon.id)")
-                            .bold()
-                            .padding(.horizontal)
-                            .aspectRatio(contentMode: .fit)
-                            .onAppear{
-                                pagQtde =  Int((Double(networkManager.count) /
-                                                Double(offsetSize)).rounded(.up))
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(networkManager.pokeIndex) { pokemon in
+                        NavigationLink(destination: DetailPokemonView(), label: {
+                            VStack {
+                                HStack {
+                                    Text("\(pokemon.id)")
+                                        .bold()
+                                        .onAppear{
+                                            pagQtde =  Int((Double(networkManager.count) /
+                                                            Double(offsetSize)).rounded(.up))
+                                        }
+                                    Text(pokemon.pokemonData.name)
+                                        .italic()
+                                        .foregroundColor(.blue)
+                                        .padding(.horizontal)
+                                }
                             }
-                        
-                        Text(pokemon.pokemonData.name)
-                            .italic()
-                            .foregroundColor(.blue)
-                            .aspectRatio(contentMode: .fill)
+                        })
                     }
                 }
-            }.onAppear {
-                networkManager.fetchData(offset: offsetValue, limit: offsetSize)
-            }
-            .navigationTitle("Pokemons")
-            
-            HStack {
-                if pagValue > 1 {
-                    Button("<") {
-                        pagValue -= 1
-                        offsetValue -= offsetSize
-                        networkManager.fetchData(offset: offsetValue, limit: offsetSize)
-                    }.padding()
+                .listStyle(.plain)
+                .onAppear {
+                    networkManager.fetchData(offset: offsetValue, limit: offsetSize)
                 }
                 
-                Text("\(pagValue) / \(pagQtde)")
-                    .padding()
                 
-                if pagValue < pagQtde {
-                    Button(">") {
-                        pagValue += 1
-                        offsetValue += offsetSize
-                        if pagValue == pagQtde {
-                            networkManager.fetchData(offset: offsetValue, limit: networkManager.count - offsetValue)
-                        }
-                        else {
+                
+                HStack {
+                    if pagValue > 1 {
+                        Button("<") {
+                            pagValue -= 1
+                            offsetValue -= offsetSize
                             networkManager.fetchData(offset: offsetValue, limit: offsetSize)
                         }
-                    }.padding()
+                    }
+                    
+                    Text("\(pagValue) / \(pagQtde)")
+                    
+                    if pagValue < pagQtde {
+                        Button(">") {
+                            pagValue += 1
+                            offsetValue += offsetSize
+                            if pagValue == pagQtde {
+                                networkManager.fetchData(offset: offsetValue, limit: networkManager.count - offsetValue)
+                            }
+                            else {
+                                networkManager.fetchData(offset: offsetValue, limit: offsetSize)
+                            }
+                        }
+                    }
                 }
             }
+            .navigationTitle("Pokemons")
+            .padding()
         }
     }
-}
     
+}
+
+
+
 
 //
 //struct ContentView_Previews: PreviewProvider {
