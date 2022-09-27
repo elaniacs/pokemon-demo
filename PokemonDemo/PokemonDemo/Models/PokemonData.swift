@@ -15,12 +15,17 @@ struct PokemonModel: Decodable {
    let results : [PokemonData]
 }
 
-struct PokemonData: Codable, Identifiable {
-    var id: UUID {
-        return UUID()
-    }
-    
+struct PokemonData: Codable {
+
     let name : String
     let url : String
 }
+
+
+struct PokemonIndex: Identifiable {
+    let id: Int
+  
+    let pokemonData: PokemonData
+}
+
 
