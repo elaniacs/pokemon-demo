@@ -11,6 +11,7 @@ class NetworkManager: ObservableObject {
     
     @Published var count = 0
     @Published var pokeIndex = [PokemonIndex]()
+    @Published var pokeDetail: PokemonDetail?
 //    @Published var pokeData = [PokemonData]()
 //
 //    func fetchData() {
@@ -57,6 +58,31 @@ class NetworkManager: ObservableObject {
                                     id += 1
                                     return PokemonIndex(id: id, pokemonData: $0)
                                 }
+                            }
+                        }
+                        catch {
+                            print(error)
+                        }
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func fetchData(url: String) {
+        
+        if let url = URL(string: url) {
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { (data, response, error) in
+                if error == nil {
+                    let decoder = JSONDecoder()
+                    if let safeData = data {
+                        do {
+                            let results = try decoder.decode(PokemonDetail.self, from: safeData)
+
+                            DispatchQueue.main.async {
+                                self.pokeDetail = results
                             }
                         }
                         catch {

@@ -14,16 +14,39 @@ struct ContentView: View {
     @State var offsetSize = 50
     @State var pagValue = 1
     @State var pagQtde = 0
+    var pokemonsPerPage = [10, 50, 100, 200]
     
     var body: some View {
         
         NavigationView {
             VStack {
+                Picker("Please choose", selection: $offsetSize) {
+                    ForEach(pokemonsPerPage, id: \.self) {
+                        Text("\($0)")
+                    }
+                }
+                .onChange(of: offsetSize) {
+                    offsetValue = 0
+                    pagValue = 1
+                    networkManager.fetchData(offset: offsetValue, limit: $0)
+                }
                 List {
                     ForEach(networkManager.pokeIndex) { pokemon in
-                        NavigationLink(destination: DetailPokemonView(), label: {
+                        NavigationLink(destination: DetailPokemonView(url: pokemon.pokemonData.url), label: {
                             VStack {
                                 HStack {
+//                                    AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemon.id).png")) { image in
+//                                                image
+//                                                    .resizable()
+//                                                    .aspectRatio(contentMode: .fill)
+//
+//                                            } placeholder: {
+//                                                Color.gray
+//                                            }
+//                                            .frame(width: 250, height: 250)
+//
+                                    
+                                    
                                     Text("\(pokemon.id)")
                                         .bold()
                                         .onAppear{
@@ -34,6 +57,7 @@ struct ContentView: View {
                                         .italic()
                                         .foregroundColor(.blue)
                                         .padding(.horizontal)
+
                                 }
                             }
                         })
@@ -43,8 +67,6 @@ struct ContentView: View {
                 .onAppear {
                     networkManager.fetchData(offset: offsetValue, limit: offsetSize)
                 }
-                
-                
                 
                 HStack {
                     if pagValue > 1 {

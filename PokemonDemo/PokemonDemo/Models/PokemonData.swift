@@ -28,4 +28,14 @@ struct PokemonIndex: Identifiable {
     let pokemonData: PokemonData
 }
 
+struct PokemonDetail: Decodable {
+    
+    let name: String
+    let base_experience: Int
+    let height: Int
+    let weight: Int
+    let id: Int
+}
+
+
 
