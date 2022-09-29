@@ -35,29 +35,24 @@ struct ContentView: View {
                         NavigationLink(destination: DetailPokemonView(url: pokemon.pokemonData.url), label: {
                             VStack {
                                 HStack {
-//                                    AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemon.id).png")) { image in
-//                                                image
-//                                                    .resizable()
-//                                                    .aspectRatio(contentMode: .fill)
-//
-//                                            } placeholder: {
-//                                                Color.gray
-//                                            }
-//                                            .frame(width: 250, height: 250)
-//
+                                    AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemon.id).png")) { image in
+                                                image
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                                    
+                                            } placeholder: {
+                                                Color.gray
+                                            }
+                                            .frame(width: 50, height: 50)
                                     
-                                    
-                                    Text("\(pokemon.id)")
-                                        .bold()
-                                        .onAppear{
-                                            pagQtde =  Int((Double(networkManager.count) /
-                                                            Double(offsetSize)).rounded(.up))
-                                        }
                                     Text(pokemon.pokemonData.name)
                                         .italic()
                                         .foregroundColor(.blue)
                                         .padding(.horizontal)
-
+                                        .onAppear{
+                                            pagQtde =  Int((Double(networkManager.count) /
+                                                            Double(offsetSize)).rounded(.up))
+                                        }
                                 }
                             }
                         })
