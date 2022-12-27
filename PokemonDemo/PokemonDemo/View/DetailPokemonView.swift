@@ -18,12 +18,12 @@ struct DetailPokemonView: View {
                 AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(networkManager.pokeDetail?.id ?? 0).png")) { image in
                             image
                                 .resizable()
-                                .aspectRatio(contentMode: .fill)
+                                .aspectRatio(contentMode: .fit)
                                 
                         } placeholder: {
                             Color.gray
                         }
-                        .frame(width: 250, height: 250)
+                        .frame(width: 250, height: 250, alignment: .center)
                 
                 HStack {
                     Text("Name: ") .bold()

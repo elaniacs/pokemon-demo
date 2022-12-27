@@ -43,12 +43,11 @@ struct ContentView: View {
                                             } placeholder: {
                                                 Color.gray
                                             }
-                                            .frame(width: 50, height: 50)
+                                            .frame(width: 50, height: 50, alignment: .center)
                                     
                                     Text(pokemon.pokemonData.name)
                                         .italic()
                                         .foregroundColor(.blue)
-                                        .padding(.horizontal)
                                         .onAppear{
                                             pagQtde =  Int((Double(networkManager.count) /
                                                             Double(offsetSize)).rounded(.up))
@@ -59,6 +58,7 @@ struct ContentView: View {
                     }
                 }
                 .listStyle(.plain)
+                .padding()
                 .onAppear {
                     networkManager.fetchData(offset: offsetValue, limit: offsetSize)
                 }
@@ -89,7 +89,6 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Pokemons")
-            .padding()
         }
     }
     
